@@ -1,24 +1,37 @@
-import logo from './logo.svg';
+import { useState } from "react";
 import './App.css';
+import Header from './components/Header';
+import UserInput from './components/UserInput';
+import Result from './components/Result';
 
 function App() {
+  const [userInput, setUserInput] = useState({
+    initialInvestment : 10000,
+    annualInvestment : 1200,
+    expectedReturn : 6,
+    duration : 10
+
+});
+
+function handleChange(newValue, inputType){
+    setUserInput(prevState =>{
+        return {
+            ...prevState,
+            [inputType] : +newValue
+        }
+
+    });
+}
+
+const isValidInput = userInput.duration>0;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header/>
+      <UserInput onChangeValue={handleChange} userInput={userInput}/>
+      {isValidInput && <Result data={userInput}/>}
+      {!isValidInput && <p className="center">Please enter a valid Duration!</p>}
+    </>
   );
 }
 
